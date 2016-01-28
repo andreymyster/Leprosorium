@@ -34,9 +34,12 @@ end
 
 post '/new' do
 	content = params[:content]
-	if content == ''
+	if content.strip.empty?
 		@error = 'Да напишите уже что-нибудь!'
 		return erb :new
 	end
-	erb "Вы ввели #{content}"
+
+	@db.execute 'insert into posts (content, created_date)
+		values (?,datetime());', [content]
+	erb 'Запись успешно отправлена'
 end
