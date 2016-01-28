@@ -25,7 +25,8 @@ configure do
 end
 
 get '/' do
-	erb "Hello!>"
+	@result = @db.execute 'select * from posts order by id desc'
+	erb :index
 end
 
 get '/new' do
