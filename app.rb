@@ -25,7 +25,7 @@ configure do
 end
 
 get '/' do
-	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"
+	erb "Hello!>"
 end
 
 get '/new' do
@@ -34,6 +34,9 @@ end
 
 post '/new' do
 	content = params[:content]
-
+	if content == ''
+		@error = 'Да напишите уже что-нибудь!'
+		return erb :new
+	end
 	erb "Вы ввели #{content}"
 end
