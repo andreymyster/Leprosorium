@@ -3,6 +3,9 @@
 
 <% @result.each do |item| %>
   <p> <%=item['content']%> </p>
-  <h6> Добавлено <%=item['created_date']%> </h6>
+  <h6>
+    Добавлено <%=item['created_date']%>
+    <a href='/details/<%=item['id']%>'>  Комментарий</a>
+  </h6>
   <hr />
 <% end %>
