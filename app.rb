@@ -41,12 +41,23 @@ get '/new' do
 	erb :new
 end
 
+#вывод информации о посте
+
 get '/details/:post_id' do
+	#получаем переменную из урла
 	post_id = params[:post_id]
+
+	#получаем список постов - у нас будет только один пост
 	result = @db.execute 'select * from posts where id=?', [post_id]
 	@row = result[0]
+
+	#выбираем комментарии для нашего поста
+	@comments = @db.execute 'select * from comments where post_id=?', [post_id]
+
 	erb :details
 end
+
+# обработчик пост-запроса details
 
 post '/details/:post_id' do
 	post_id = params[:post_id]
