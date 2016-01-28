@@ -1,7 +1,9 @@
 <h2>Добавить новый пост</h2>
 
 <form action='/new' method='POST' role='form'>
-  <textarea name='content' class="form-control" rows="8" placeholder="Ну пиши уже..."></textarea>
+  <textarea name='content' class="form-control" rows="8" placeholder="Ну пиши уже..."><%=@content%></textarea>
+  <br />
+  <textarea name='autor' class="form-control" rows="1" placeholder="Представься"><%=@autor%></textarea>
   <br />
   <button type="submit" class="btn btn-primary">Yarrrr</button>
 </form>

@@ -4,24 +4,43 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+# инициализация базы данных
+# создается переменная с БД и определяется параметр для возврата хеша
+
 def init_db
 	@db = SQLite3::Database.new 'lepra.db'
 	@db.results_as_hash = true
 end
 
+# формирование сообщения об ошибке
+# получает хеш и проверяет если в нем есть пустой ключ то добавляется соотв значение
+
+def set_error hh
+  @error = hh.select { |key,_| params[key] == ''}.values.join(', ')
+end
+
+# выполнить прежде всего инициализацию БД
+
 before do
 	init_db
 end
 
+# конфигурация
+
 configure do
 	init_db
+
+	# создать БД Посты если таковой не существует
 	@db.execute 'CREATE TABLE IF NOT EXISTS
 		Posts
 		(
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			created_date DATE,
-			content TEXT
+			content TEXT,
+			autor TEXT
 		);'
+
+	# создать БД Комментариев если таковой не существует
 	@db.execute 'CREATE TABLE IF NOT EXISTS
 		Comments
 		(
@@ -32,18 +51,24 @@ configure do
 		);'
 end
 
+# обработка корневого запроса
+
 get '/' do
+
+	# сохранение в переменную БД Посты для вывода
 	@result = @db.execute 'select * from posts order by id desc'
+
 	erb :index
 end
 
+# новый пост
 get '/new' do
 	erb :new
 end
 
 #вывод информации о посте
-
 get '/details/:post_id' do
+
 	#получаем переменную из урла
 	post_id = params[:post_id]
 
@@ -68,14 +93,18 @@ post '/details/:post_id' do
 end
 
 post '/new' do
-	content = params[:content]
-	if content.strip.empty?
-		@error = 'Да напишите уже что-нибудь!'
+	@content = params[:content]
+	@autor = params[:autor]
+
+	hh = {:content => 'Введи текст поста', :autor => 'Представься'}
+	set_error hh
+
+	if @error != ''
 		return erb :new
 	end
 
-	@db.execute 'insert into posts (content, created_date)
-		values (?,datetime());', [content]
+	@db.execute 'insert into posts (content, created_date, autor)
+		values (?,datetime(), ?);', [@content, @autor]
 
 	redirect to '/'
 end
