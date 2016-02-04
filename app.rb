@@ -62,10 +62,9 @@ post '/details/:post_id' do
 
 	# сохраняем переменную в бд
 	c.save!
-
-
+	
 	# редирект на эту же страницу с новым комментарием
-	# redirect to ("/details/" + post_id)
+	redirect to ("/details/" + post_id)
 end
 
 # обработчик формы создания нового поста
