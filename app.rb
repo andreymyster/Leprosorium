@@ -45,7 +45,7 @@ get '/details/:post_id' do
 
 	#выбираем комментарии для нашего поста
 	# @comments = Comment.find_by post_id: post_id
-	@comments = Comment.all
+	@comments = Comment.where post_id: post_id
 
 	erb :details
 end
@@ -54,17 +54,20 @@ end
 
 post '/details/:post_id' do
 
+	post_id = params[:post_id]
+
 	# получаем содержание комментария и записываем в переменную бд
 	c = Comment.new params[:comment]
-
 	# добавляем в переменную номер поста из параметров урл-а
-	c.post_id = params[:post_id]
+	c.post_id = post_id
 
 	# сохраняем переменную в бд
-	c.save!
-	
-	# редирект на эту же страницу с новым комментарием
-	redirect to ("/details/" + post_id)
+	if c.save
+		redirect to ("/details/" + post_id)
+	else
+		@error = c.errors.full_messages.first
+		redirect to ("/details/" + post_id)
+	end
 end
 
 # обработчик формы создания нового поста
@@ -72,8 +75,11 @@ end
 post '/new' do
 	# сохранение значений из формы в переменную
 	p = Post.new params[:post]
-	p.save
-
-	# редирект на корневую страницу с новым постом
-	redirect to '/'
+	# валидация введенных данных
+	if p.save
+		redirect to '/'
+	else
+		@error = p.errors.full_messages.first
+		erb :new
+	end
 end

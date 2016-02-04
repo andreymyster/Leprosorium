@@ -11,6 +11,17 @@
 <br />
 
 <!-- вывод комментариев -->
+<h4>Комментарии</h4>
+<br />
+<% @comments.each do |comment| %>
+   <p>
+      <%= comment[:content_com] %>
+      <br />
+      <p style="font-size: 80%; color: #999">
+         Добавлено <%=comment[:created_at]%></p>
+      <hr>
+   </p>
+<% end %>
 
 <br />
 
