@@ -2,23 +2,15 @@
 <br />
 
 <!-- вывод поста -->
-<p> <%=@row['content']%> </p>
-<p style="font-size: 80%; color: #999">Добавлено <%=@row['created_date']%> Автор <%=@row['autor']%></p>
+<p> <%=@result[:content]%> </p>
+<p style="font-size: 80%; color: #999">
+   Добавлено <%=@result[:created_at]%>
+   Автор <%=@result[:author]%></p>
 
 <br />
 <br />
 
 <!-- вывод комментариев -->
-<h4>Комментарии</h4>
-<br />
-<% @comments.each do |comment| %>
-   <p>
-      <%= comment['content'] %>
-      <br />
-      <p style="font-size: 80%; color: #999">Добавлено <%=comment['created_date']%></p>
-      <hr>
-   </p>
-<% end %>
 
 <br />
 
@@ -26,8 +18,8 @@
 
 <h4>Комментарий: </h4>
 
-<form action='/details/<%=@row['id']%>' method='POST' role='form'>
-   <textarea name='content' class="form-control" rows="8" placeholder="Ну пиши уже..."></textarea>
+<form action='/details/<%=@result[:id]%>' method='POST' role='form'>
+   <textarea name='comment[content_com]' class="form-control" rows="8" placeholder="Ну пиши уже..."></textarea>
    <br />
    <button type="submit" class="btn btn-primary">Yarrrr</button>
 </form>
