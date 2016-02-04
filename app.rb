@@ -25,7 +25,7 @@ end
 
 get '/' do
 	# сохранение в переменную текст базы данных Посты для вывода
-	# @result = @db.execute 'select * from posts order by id desc'
+	@result = Post.all
 	erb :index
 end
 
@@ -71,16 +71,9 @@ end
 # обработчик формы создания нового поста
 
 post '/new' do
-
 	# сохранение значений из формы в переменную
 	@p = Post.new params[:post]
 	@p.save
-
-
-	# добавляем в бд информацию о содержании поста, дате и авторе
-	# @db.execute 'insert into posts (content, created_date, autor)
-	# 	values (?,datetime(), ?);', [@content, @autor]
-
 	# редирект на корневую страницу с новым постом
 	redirect to '/'
 end

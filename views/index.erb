@@ -2,3 +2,11 @@
 <br />
 
 <!-- вывод всех постов -->
+<% @result.each do |item| %>
+  <p> <%=item.content%> </p>
+  <h6>
+    Добавлено <%=item.created_at%>, автор <%=item.author%>
+    <a href='/details/<%=item.id%>'>  Комментарий</a>
+  </h6>
+  <hr />
+<% end %>
